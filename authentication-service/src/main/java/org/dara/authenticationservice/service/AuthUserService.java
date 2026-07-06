@@ -13,4 +13,5 @@ public interface AuthUserService {
     public Optional<AuthUser> findByEmail(String email);
     public boolean existsByUsername(String username);
     public boolean existsByEmail(String email);
+    public AuthResponse login(LoginRequest loginRequest);
 }
