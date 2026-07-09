@@ -2,6 +2,7 @@ package org.dara.authenticationservice.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.dara.authenticationservice.Exception.EmailAlreadyExistsException;
+import org.dara.authenticationservice.Exception.UserNotFoundException;
 import org.dara.authenticationservice.Exception.UsernameAlreadyExistsException;
 import org.dara.authenticationservice.dto.AuthResponse;
 import org.dara.authenticationservice.dto.LoginRequest;
@@ -31,13 +32,22 @@ public class AuthServiceImpl implements AuthService {
 
 
     @Override
-    public AuthResponse login(LoginRequest loginRequest) {
+    public AuthResponse login(LoginRequest loginRequest) throws UserNotFoundException {
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.username(), loginRequest.password()));
         if(authentication.isAuthenticated()) {
-            CustomUserDetails userDetails = (CustomUserDetails)authentication.getDetails();
-            return authUserMapper.authUserToAuthResponse(userDetails.getAuthUser());
-        }else
-            return null;
+            CustomUserDetails principal = (CustomUserDetails) authentication.getPrincipal();
+            AuthUser user = principal.getAuthUser();
+            String accessToken = jwtService.generateAccessToken(user);
+            String refreshToken = refreshTokenService.create(user);
+            return new AuthResponse(
+                    user.getId(),
+                    user.getUsername(),
+                    accessToken,
+                    refreshToken,
+                    "Bearer"
+            );
+        }
+        throw new UserNotFoundException();
     }
 
     @Override
