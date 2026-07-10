@@ -5,8 +5,10 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Entity
 @Data
@@ -45,5 +47,9 @@ public class AuthUser {
         userRole.setRole(role);
         this.setUserRoles(Set.of(userRole));
         userRoles.add(userRole);
+    }
+
+    public List<Role> getRoleList(){
+        return userRoles.stream().map(UserRole::getRole).collect(Collectors.toList());
     }
 }
