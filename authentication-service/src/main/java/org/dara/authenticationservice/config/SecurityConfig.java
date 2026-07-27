@@ -51,7 +51,8 @@ public class SecurityConfig {
                                                                                     "/auth/login",
                                                                                     "/auth/register",
                                                                                     "/auth/refresh"
-                                                                                ).permitAll())
+                                                                                ).permitAll().anyRequest().authenticated())
+                //.exceptionHandling(ex -> ex.authenticationEntryPoint(new JwtAuthenticationEntryPoint()))
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(
                         jwtAuthenticationFilter,

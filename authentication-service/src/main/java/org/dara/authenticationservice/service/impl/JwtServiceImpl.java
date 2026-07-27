@@ -8,6 +8,7 @@ import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
 import org.dara.authenticationservice.config.JwtProperties;
 import org.dara.authenticationservice.model.AuthUser;
+import org.dara.authenticationservice.model.Permission;
 import org.dara.authenticationservice.model.Role;
 import org.dara.authenticationservice.service.JwtService;
 import org.springframework.stereotype.Service;
@@ -23,7 +24,7 @@ public class JwtServiceImpl implements JwtService {
 
     @Override
     public String generateAccessToken(AuthUser user) {
-        Map<String, Object> claims = buildClaims(user);
+        Map<String, Object> claims = buildJwtClaims(user);
         return buildToken(user, claims);
     }
 
@@ -52,10 +53,11 @@ public class JwtServiceImpl implements JwtService {
         return extractClaims(token).get("userId", UUID.class);
     }
 
-    private Map<String, Object> buildClaims(AuthUser authUser){
+    private Map<String, Object> buildJwtClaims(AuthUser authUser){
         Map<String, Object> claims = new HashMap<>();
         claims.put("userId", authUser.getId());
         claims.put("roles", authUser.getRoleList().stream().map(Role::getRoleName).toList());
+        claims.put("permissions", authUser.getRoleList().stream().flatMap(role -> role.getPermissions().stream().map(Permission::getPermissionName)).distinct().toList());
         return claims;
     }
 

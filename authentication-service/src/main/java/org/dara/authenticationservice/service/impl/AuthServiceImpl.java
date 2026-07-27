@@ -10,7 +10,9 @@ import org.dara.authenticationservice.dto.RegisterRequest;
 import org.dara.authenticationservice.mapper.AuthUserMapper;
 import org.dara.authenticationservice.model.AuthUser;
 import org.dara.authenticationservice.model.CustomUserDetails;
+import org.dara.authenticationservice.model.LoginEvent;
 import org.dara.authenticationservice.service.*;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -28,7 +30,7 @@ public class AuthServiceImpl implements AuthService {
     private final JwtService jwtService;
     private final RefreshTokenService refreshTokenService;
     private final RoleService roleService;
-
+    private final ApplicationEventPublisher eventPublisher;
 
 
     @Override
@@ -39,6 +41,9 @@ public class AuthServiceImpl implements AuthService {
             AuthUser user = principal.getAuthUser();
             String accessToken = jwtService.generateAccessToken(user);
             String refreshToken = refreshTokenService.create(user);
+
+            eventPublisher.publishEvent(new LoginEvent(user.getId(), user.getUsername()));
+
             return new AuthResponse(
                     user.getId(),
                     user.getUsername(),
