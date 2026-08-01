@@ -1,17 +1,15 @@
 package org.dara.apigateway.config;
 
+import org.dara.apigateway.model.CurrentUser;
+import org.dara.apigateway.model.CurrentUserAuthentication;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.jwt.Jwt;
-import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Component
 public class CustomJwtAuthenticationConverter implements Converter<Jwt, AbstractAuthenticationToken> {
@@ -19,10 +17,13 @@ public class CustomJwtAuthenticationConverter implements Converter<Jwt, Abstract
     @Override
     public AbstractAuthenticationToken convert(Jwt jwt) {
         Collection<GrantedAuthority> authorities = new ArrayList<>();
-        List<String> roles = Optional.ofNullable(jwt.getClaimAsStringList("roles")).orElse(List.of());
+        Set<String> roles = jwt.getClaim("roles");
+        assert roles != null;
         roles.forEach(role -> authorities.add(new SimpleGrantedAuthority(role)));
-        List<String> permissions = Optional.ofNullable(jwt.getClaimAsStringList("permissions")).orElse(List.of());
+        Set<String> permissions = jwt.getClaim("permissions");
+        assert permissions != null;
         permissions.forEach(permission -> authorities.add(new SimpleGrantedAuthority(permission)));
-        return new JwtAuthenticationToken(jwt, authorities);
+        CurrentUser currentUser = new CurrentUser(jwt.getClaim("userId"),jwt.getClaim("username"),jwt.getClaim("email"),roles,permissions);
+        return new CurrentUserAuthentication(currentUser, authorities);
     }
 }
