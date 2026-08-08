@@ -1,16 +1,18 @@
-package org.dara.apigateway.model;
+package org.dara.cryptosecurity.config;
 
+
+import org.dara.cryptosecurity.model.CurrentUser;
 import org.jspecify.annotations.Nullable;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 
 import java.util.Collection;
 
-public class CurrentUserAuthentication extends AbstractAuthenticationToken {
+public class JwtAuthenticationToken  extends AbstractAuthenticationToken {
 
     private final CurrentUser currentUser;
 
-    public CurrentUserAuthentication(CurrentUser currentUser, Collection<? extends GrantedAuthority> authorities) {
+    public JwtAuthenticationToken (CurrentUser currentUser, Collection<? extends GrantedAuthority> authorities) {
         super(authorities);
         this.currentUser = currentUser;
         super.setAuthenticated(true);
@@ -21,7 +23,7 @@ public class CurrentUserAuthentication extends AbstractAuthenticationToken {
     }
 
     @Override
-    public @Nullable Object getPrincipal() {
+    public CurrentUser  getPrincipal() {
         return currentUser;
     }
 }

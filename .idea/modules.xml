@@ -3,7 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/authentication-service/authentication-service.iml" filepath="$PROJECT_DIR$/authentication-service/authentication-service.iml" />
-      <module fileurl="file://$PROJECT_DIR$/crypto.iml" filepath="$PROJECT_DIR$/crypto.iml" />
     </modules>
   </component>
 </project>
