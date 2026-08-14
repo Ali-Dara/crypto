@@ -1,13 +1,13 @@
 package org.dara.authenticationservice.model;
 
 import jakarta.persistence.*;
-import lombok.Data;
-
-import java.util.Set;
+import lombok.Getter;
+import lombok.Setter;
 
 
 @Entity
-@Data
+@Getter
+@Setter
 public class RolePermission {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -23,3 +23,8 @@ jwt:
   secret-key: 4mA5LQm6W9xZ2pR8sV1nB3cD7fG0hJkL9pQ2rT5yU8iO1aS4dF
   access-token-expiration: 900000       # 15 min
   refresh-token-expiration: 2592000000  # 30 days
+
+
+logging:
+  level:
+    org.springframework.security: DEBUG

@@ -29,7 +29,7 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
     public String create(AuthUser user) {
         RefreshToken refreshToken = new RefreshToken();
         refreshToken.setAuthUser(user);
-        refreshToken.setExpiry_date(refreshToken.getExpiry_date().plusSeconds(jwtProperties.refreshTokenExpiration()));
+        refreshToken.setExpiry_date(LocalDateTime.now().plusSeconds(jwtProperties.refreshTokenExpiration()));
         String token = UUID.randomUUID().toString();
         refreshToken.setToken(generateSHA256Hash(token));
         refreshTokenRepository.save(refreshToken);

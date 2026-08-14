@@ -19,8 +19,8 @@ public class ErrorResponseWriter {
     public void write(HttpServletResponse response, HttpStatus status, String message, String path) throws IOException {
         ApiErrorResponse responseBody = ApiErrorResponse.builder()
                 .timestamp(LocalDateTime.now())
-                .status(HttpStatus.UNAUTHORIZED.value())
-                .error(HttpStatus.UNAUTHORIZED.getReasonPhrase())
+                .status(status.value())
+                .error(status.getReasonPhrase())
                 .message(message)
                 .path(path)
                 .build();

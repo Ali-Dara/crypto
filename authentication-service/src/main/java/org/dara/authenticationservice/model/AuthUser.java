@@ -2,16 +2,18 @@ package org.dara.authenticationservice.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotNull;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Entity
-@Data
+@Getter
+@Setter
 public class AuthUser {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,8 +29,11 @@ public class AuthUser {
     private UUID userUuid;
     private boolean enabled = true;
     private boolean locked = false;
-    @OneToMany(mappedBy = "user")
-    private Set<UserRole> userRoles;
+
+    @OneToMany(mappedBy = "user",
+               cascade = CascadeType.ALL)
+    private Set<UserRole> userRoles = new HashSet<>();;
+
     @OneToMany(mappedBy = "authUser",
                cascade = CascadeType.ALL,
                orphanRemoval = true)
@@ -45,7 +50,6 @@ public class AuthUser {
         UserRole userRole = new UserRole();
         userRole.setUser(this);
         userRole.setRole(role);
-        this.setUserRoles(Set.of(userRole));
         userRoles.add(userRole);
     }
 
