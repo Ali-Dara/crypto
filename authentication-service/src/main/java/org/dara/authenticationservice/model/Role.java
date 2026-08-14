@@ -18,9 +18,11 @@ public class Role {
     private Long id;
     @Column(nullable = false)
     private String roleName;
-    @OneToMany(mappedBy = "role")
+    @OneToMany(mappedBy = "role",
+                cascade = CascadeType.ALL)
     private Set<UserRole> userRoles;
-    @OneToMany(mappedBy = "role")
+    @OneToMany(mappedBy = "role",
+                cascade = CascadeType.ALL)
     private Set<RolePermission> rolePermissions;
 
     public List<Permission> getPermissions(){

@@ -37,7 +37,7 @@ public class AuthUser {
     @OneToMany(mappedBy = "authUser",
                cascade = CascadeType.ALL,
                orphanRemoval = true)
-    private Set<RefreshToken> refreshTokens;
+    private Set<RefreshToken> refreshTokens = new HashSet<>();;
 
     @PrePersist
     public void prePersist() {

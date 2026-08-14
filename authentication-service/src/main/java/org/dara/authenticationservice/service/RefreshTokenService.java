@@ -16,4 +16,6 @@ public interface RefreshTokenService {
     RefreshToken verify(String refreshToken) throws Exception;
     AuthResponse refresh(RefreshTokenRequest request) throws Exception;
     void revoke(String refreshToken);
+    void logout(Long userId, String refreshToken) throws Exception;
+    void logoutAllSession(Long userId, String refreshToken) throws Exception;
 }

@@ -40,4 +40,9 @@ public class AuthUserServiceImpl implements AuthUserService {
     public boolean existsByEmail(String email) {
         return authUserRepository.existsByEmail(email);
     }
+
+    @Override
+    public Optional<AuthUser> findByUsernameWithAuthorities(String username) {
+        return authUserRepository.findByUsernameWithAuthorities(username);
+    }
 }

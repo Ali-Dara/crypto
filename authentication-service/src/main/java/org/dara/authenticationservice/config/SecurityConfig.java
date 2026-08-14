@@ -48,7 +48,8 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth.requestMatchers(
-                                                                                    "/auth/**",
+                                                                                    "/auth/login",
+                                                                                    "/auth/refresh",
                                                                                     "/registering/**"
                                                                                 ).permitAll().anyRequest().authenticated())
                 //.exceptionHandling(ex -> ex.authenticationEntryPoint(new JwtAuthenticationEntryPoint()))

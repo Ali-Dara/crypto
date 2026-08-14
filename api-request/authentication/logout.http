@@ -1,0 +1,7 @@
+### Send POST request with json body
+POST http://localhost:8000/auth/logout
+Content-Type: application/json
+
+{
+  "refreshToken": "b0aea67c-1f28-4b7a-ab24-e7fe298be7f9"
+}

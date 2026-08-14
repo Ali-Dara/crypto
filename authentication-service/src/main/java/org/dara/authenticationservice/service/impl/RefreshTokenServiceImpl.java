@@ -11,6 +11,7 @@ import org.dara.authenticationservice.service.JwtService;
 import org.dara.authenticationservice.service.RefreshTokenService;
 import org.springframework.stereotype.Service;
 
+import javax.swing.text.html.Option;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDateTime;
@@ -52,17 +53,21 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
     }
 
     @Override
-    public RefreshToken verify(String refreshToken) throws Exception {
-        Optional<RefreshToken> token = findByToken(generateSHA256Hash(refreshToken));
-        if (token.isPresent()) {
-            if(!token.get().getRevoked())
-                throw new Exception("refresh token expired");
-            if(token.get().getExpiry_date().isBefore(LocalDateTime.now()))
-                throw new Exception("refresh token expired");
-            else
-                return token.get();
+    public RefreshToken verify(String rawToken) throws Exception {
+        RefreshToken refreshToken = findByToken(rawToken)
+                .orElseThrow(() ->
+                        new Exception("refresh token not found")
+                );
+
+        if (refreshToken.getRevoked()) {
+            throw new Exception("refresh token revoked");
         }
-        throw new Exception("refresh token not found");
+
+        if (refreshToken.getExpiry_date().isBefore(LocalDateTime.now())) {
+            throw new Exception("refresh token expired");
+        }
+
+        return refreshToken;
     }
 
     @Override
@@ -83,11 +88,28 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
 
     @Override
     public void revoke(String refreshToken) {
-        Optional<RefreshToken> token = findByToken(generateSHA256Hash(refreshToken));
+        Optional<RefreshToken> token = findByToken(refreshToken);
         if (token.isPresent()) {
             token.get().setRevoked(true);
             refreshTokenRepository.save(token.get());
         }
+    }
+
+    @Override
+    public void logout(Long userId, String refreshToken) throws Exception {
+        RefreshToken token = verify(refreshToken);
+        if (!token.getAuthUser().getId().equals(userId))
+            throw new Exception("Refresh token does not belong to user");
+        token.setRevoked(true);
+        refreshTokenRepository.save(token);
+    }
+
+    @Override
+    public void logoutAllSession(Long userId, String refreshToken) throws Exception {
+        RefreshToken token = verify(refreshToken);
+        if (!token.getAuthUser().getId().equals(userId))
+            throw new Exception("Refresh token does not belong to user");
+        refreshTokenRepository.revokeAllByAuthUser(token.getAuthUser());
     }
 
     private String generateSHA256Hash(String input) {

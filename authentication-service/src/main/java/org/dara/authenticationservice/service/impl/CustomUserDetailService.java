@@ -19,7 +19,7 @@ public class CustomUserDetailService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<AuthUser> authUser= authUserService.findByUsername(username);
+        Optional<AuthUser> authUser= authUserService.findByUsernameWithAuthorities(username);
         if(authUser.isPresent())
             return new CustomUserDetails(authUser.get());
         else

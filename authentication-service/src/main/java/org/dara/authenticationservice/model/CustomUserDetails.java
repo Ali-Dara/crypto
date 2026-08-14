@@ -40,4 +40,11 @@ public class CustomUserDetails implements UserDetails {
     public AuthUser getAuthUser() {
         return authUser;
     }
+
+    public CurrentUser getCurrentUser() {
+        return new CurrentUser(
+                authUser.getId(),
+                authUser.getUsername()
+        );
+    }
 }
