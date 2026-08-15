@@ -3,9 +3,9 @@ package org.dara.userservice.dto;
 import java.time.LocalDate;
 
 public record UserResponseDto(
-        String id,
+        String userUUID,
         String name,
-        String email,
+        String phone,
         LocalDate registerDate,
         LocalDate birthDate
 ) {}

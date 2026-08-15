@@ -80,6 +80,7 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
         return new AuthResponse(
                 authUser.getId(),
                 authUser.getUsername(),
+                authUser.getUserUuid().toString(),
                 newAccessToken,
                 newRefreshToken,
                 "Bearer"

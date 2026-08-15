@@ -1,7 +1,7 @@
 package org.dara.cryptosecurity.util;
 
-import org.dara.cryptosecurity.config.JwtAuthenticationToken;
 import org.dara.cryptosecurity.model.CurrentUser;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 
@@ -11,8 +11,8 @@ public final class SecurityUtils {
 
     private SecurityUtils() {}
 
-    private static JwtAuthenticationToken getAuthentication() {
-        return (JwtAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
+    private static Authentication getAuthentication() {
+        return SecurityContextHolder.getContext().getAuthentication();
     }
 
     public static CurrentUser getCurrentUser() {

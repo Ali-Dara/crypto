@@ -55,9 +55,10 @@ public class JwtServiceImpl implements JwtService {
 
     private Map<String, Object> buildJwtClaims(AuthUser authUser){
         Map<String, Object> claims = new HashMap<>();
-        claims.put("userId", authUser.getUserUuid());
+        claims.put("userId", authUser.getId());
         claims.put("email", authUser.getEmail());
         claims.put("roles", authUser.getRoleList().stream().map(Role::getRoleName).toList());
+        claims.put("userUUID", authUser.getUserUuid());
         claims.put("permissions", authUser.getRoleList().stream().flatMap(role -> role.getPermissions().stream().map(Permission::getPermissionName)).distinct().toList());
         return claims;
     }

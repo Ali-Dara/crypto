@@ -1,31 +1,34 @@
 package org.dara.userservice.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
-import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDate;
 import java.util.UUID;
 
-@Entity(name="userData")
-@Data
+@Entity(name="users")
+@Getter
+@Setter
+@NoArgsConstructor
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true, updatable = false)
     private UUID userUUID;
-    @Column(nullable = false)
+    @Column
     private String name;
-    @Column(nullable = false)
-    private String email;
-    @Column(nullable = false)
+    @Column
+    private String phone;
+    @Column
     private LocalDate birthDate;
-    @Column(nullable = false)
+    @Column(nullable = false, updatable = false)
     private LocalDate registerDate;
 
-    public User(){
+    public User(UUID userUUID){
         registerDate = LocalDate.now();
     }
 }

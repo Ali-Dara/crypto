@@ -47,6 +47,7 @@ public class AuthServiceImpl implements AuthService {
             return new AuthResponse(
                     user.getId(),
                     user.getUsername(),
+                    user.getUserUuid().toString(),
                     accessToken,
                     refreshToken,
                     "Bearer"

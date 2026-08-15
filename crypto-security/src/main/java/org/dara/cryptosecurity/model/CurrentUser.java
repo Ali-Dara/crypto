@@ -3,7 +3,7 @@ package org.dara.cryptosecurity.model;
 import java.util.UUID;
 
 public record CurrentUser(
-        UUID userId,
+        UUID userUuid,
         String username,
         String email
 ) {}

@@ -1,13 +1,13 @@
 package org.dara.cryptosecurity.converter;
 
 
-import org.dara.cryptosecurity.config.JwtAuthenticationToken;
 import org.dara.cryptosecurity.model.CurrentUser;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
@@ -26,7 +26,7 @@ public class CustomJwtAuthenticationConverter implements Converter<Jwt, Abstract
 
     @Override
     public AbstractAuthenticationToken convert(Jwt jwt) {
-        CurrentUser currentUser = new CurrentUser(UUID.fromString(jwt.getClaimAsString("userId")),jwt.getClaimAsString("username"),jwt.getClaimAsString("email"));
-        return new JwtAuthenticationToken(currentUser, extractAuthorities(jwt));
+        CurrentUser currentUser = new CurrentUser(UUID.fromString(jwt.getClaimAsString("userUUID")),jwt.getSubject(),jwt.getClaimAsString("email"));
+        return new JwtAuthenticationToken(jwt, currentUser, extractAuthorities(jwt));
     }
 }
