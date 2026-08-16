@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.dara.authenticationservice.service.impl.CustomUserDetailService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -47,7 +48,9 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(auth -> auth.requestMatchers(
+                .authorizeHttpRequests(auth -> auth
+                                                                            .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                                                                            .requestMatchers(
                                                                                     "/auth/login",
                                                                                     "/auth/refresh",
                                                                                     "/registering/**"

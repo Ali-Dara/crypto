@@ -24,7 +24,6 @@ jwt:
   access-token-expiration: 900000       # 15 min
   refresh-token-expiration: 2592000000  # 30 days
 
-
-logging:
-  level:
-    org.springframework.security: DEBUG
+crypto:
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}

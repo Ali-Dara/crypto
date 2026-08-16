@@ -5,6 +5,7 @@ import org.dara.authenticationservice.Exception.EmailAlreadyExistsException;
 import org.dara.authenticationservice.Exception.UserNotFoundException;
 import org.dara.authenticationservice.Exception.UsernameAlreadyExistsException;
 import org.dara.authenticationservice.dto.AuthResponse;
+import org.dara.authenticationservice.dto.AuthUserRegisteredEvent;
 import org.dara.authenticationservice.dto.LoginRequest;
 import org.dara.authenticationservice.dto.RegisterRequest;
 import org.dara.authenticationservice.mapper.AuthUserMapper;
@@ -18,6 +19,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -31,6 +33,7 @@ public class AuthServiceImpl implements AuthService {
     private final RefreshTokenService refreshTokenService;
     private final RoleService roleService;
     private final ApplicationEventPublisher eventPublisher;
+    private final ApplicationEventPublisher applicationEventPublisher;
 
 
     @Override
@@ -56,6 +59,7 @@ public class AuthServiceImpl implements AuthService {
         throw new UserNotFoundException();
     }
 
+    @Transactional
     @Override
     public AuthResponse register(RegisterRequest registerRequest) {
 
@@ -71,6 +75,12 @@ public class AuthServiceImpl implements AuthService {
         roleService.findRoleByRoleName("ROLE_USER").ifPresent(user::addRole);
 
         authUserService.save(user);
+
+        applicationEventPublisher.publishEvent(
+                new AuthUserRegisteredEvent(user.getUserUuid(),
+                                            user.getUsername())
+        );
+
         return authUserMapper.authUserToAuthResponse(user);
     }
 }
