@@ -1,7 +1,7 @@
 package org.dara.authenticationservice.events;
 
 import lombok.RequiredArgsConstructor;
-import org.dara.authenticationservice.dto.AuthUserRegisteredEvent;
+import org.dara.cryptoevent.Dto.AuthUserRegisteredEvent;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 

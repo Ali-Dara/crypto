@@ -5,7 +5,6 @@ import org.dara.authenticationservice.Exception.EmailAlreadyExistsException;
 import org.dara.authenticationservice.Exception.UserNotFoundException;
 import org.dara.authenticationservice.Exception.UsernameAlreadyExistsException;
 import org.dara.authenticationservice.dto.AuthResponse;
-import org.dara.authenticationservice.dto.AuthUserRegisteredEvent;
 import org.dara.authenticationservice.dto.LoginRequest;
 import org.dara.authenticationservice.dto.RegisterRequest;
 import org.dara.authenticationservice.mapper.AuthUserMapper;
@@ -13,6 +12,7 @@ import org.dara.authenticationservice.model.AuthUser;
 import org.dara.authenticationservice.model.CustomUserDetails;
 import org.dara.authenticationservice.model.LoginEvent;
 import org.dara.authenticationservice.service.*;
+import org.dara.cryptoevent.Dto.AuthUserRegisteredEvent;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -34,7 +34,7 @@ public class AuthServiceImpl implements AuthService {
     private final RoleService roleService;
     private final ApplicationEventPublisher eventPublisher;
     private final ApplicationEventPublisher applicationEventPublisher;
-
+    private final OutboxEventService outboxEventService;
 
     @Override
     public AuthResponse login(LoginRequest loginRequest) throws UserNotFoundException {
@@ -76,11 +76,21 @@ public class AuthServiceImpl implements AuthService {
 
         authUserService.save(user);
 
-        applicationEventPublisher.publishEvent(
-                new AuthUserRegisteredEvent(user.getUserUuid(),
-                                            user.getUsername())
+//        applicationEventPublisher.publishEvent(
+//                new AuthUserRegisteredEvent(user.getUserUuid(),
+//                                            user.getUsername())
+//        );
+        AuthUserRegisteredEvent event =
+                new AuthUserRegisteredEvent(
+                        user.getUserUuid(),
+                        user.getUsername()
+                );
+        outboxEventService.save(
+                user.getUserUuid(),
+                "AuthUserRegisteredEvent",
+                "auth.user.registered",
+                event
         );
-
         return authUserMapper.authUserToAuthResponse(user);
     }
 }

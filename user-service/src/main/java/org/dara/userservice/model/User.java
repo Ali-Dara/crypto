@@ -11,7 +11,6 @@ import java.util.UUID;
 @Entity(name="users")
 @Getter
 @Setter
-@NoArgsConstructor
 public class User {
 
     @Id
@@ -20,7 +19,9 @@ public class User {
     @Column(nullable = false, unique = true, updatable = false)
     private UUID userUUID;
     @Column
-    private String name;
+    private String userName;
+    @Column
+    private String fullName;
     @Column
     private String phone;
     @Column
@@ -28,7 +29,7 @@ public class User {
     @Column(nullable = false, updatable = false)
     private LocalDate registerDate;
 
-    public User(UUID userUUID){
+    public User(){
         registerDate = LocalDate.now();
     }
 }

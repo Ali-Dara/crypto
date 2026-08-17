@@ -1,6 +1,7 @@
 package org.dara.userservice.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.dara.cryptoevent.Dto.AuthUserRegisteredEvent;
 import org.dara.cryptosecurity.model.CurrentUser;
 import org.dara.cryptosecurity.util.SecurityUtils;
 import org.dara.userservice.Exception.UserNotFoundException;
@@ -10,6 +11,7 @@ import org.dara.userservice.model.User;
 import org.dara.userservice.repository.UserRepository;
 import org.dara.userservice.service.UserService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
@@ -20,6 +22,19 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+
+    @Transactional
+    @Override
+    public void createUserByRegisterEvent(AuthUserRegisteredEvent event) {
+
+        if(userRepository.existsByUserUUID(event.userUUID()))
+            return;
+
+        User newUser = new User();
+        newUser.setUserUUID(event.userUUID());
+        newUser.setUserName(event.username());
+        userRepository.save(newUser);
+    }
 
     @Override
     public UserResponseDto getCurrentUser() {
