@@ -4,8 +4,9 @@ import java.time.LocalDate;
 
 public record UserResponseDto(
         String userUUID,
-        String name,
+        String fullName,
         String phone,
+        String email,
         LocalDate registerDate,
         LocalDate birthDate
 ) {}

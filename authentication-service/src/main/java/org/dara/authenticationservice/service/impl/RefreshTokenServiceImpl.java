@@ -2,8 +2,8 @@ package org.dara.authenticationservice.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.dara.authenticationservice.config.JwtProperties;
-import org.dara.authenticationservice.dto.AuthResponse;
 import org.dara.authenticationservice.dto.RefreshTokenRequest;
+import org.dara.authenticationservice.dto.RefreshTokenResponse;
 import org.dara.authenticationservice.model.AuthUser;
 import org.dara.authenticationservice.model.RefreshToken;
 import org.dara.authenticationservice.repository.RefreshTokenRepository;
@@ -11,7 +11,6 @@ import org.dara.authenticationservice.service.JwtService;
 import org.dara.authenticationservice.service.RefreshTokenService;
 import org.springframework.stereotype.Service;
 
-import javax.swing.text.html.Option;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDateTime;
@@ -71,16 +70,13 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
     }
 
     @Override
-    public AuthResponse refresh(RefreshTokenRequest request) throws Exception{
+    public RefreshTokenResponse refresh(RefreshTokenRequest request) throws Exception{
         RefreshToken refreshToken = verify(request.refreshToken());
         AuthUser authUser = refreshToken.getAuthUser();
-        revoke(refreshToken.getToken());
+        revoke(refreshToken);
         String newRefreshToken = create(authUser);
         String newAccessToken = jwtService.generateAccessToken(authUser);
-        return new AuthResponse(
-                authUser.getId(),
-                authUser.getUsername(),
-                authUser.getUserUuid().toString(),
+        return new RefreshTokenResponse(
                 newAccessToken,
                 newRefreshToken,
                 "Bearer"
@@ -88,12 +84,9 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
     }
 
     @Override
-    public void revoke(String refreshToken) {
-        Optional<RefreshToken> token = findByToken(refreshToken);
-        if (token.isPresent()) {
-            token.get().setRevoked(true);
-            refreshTokenRepository.save(token.get());
-        }
+    public void revoke(RefreshToken refreshToken) {
+            refreshToken.setRevoked(true);
+            refreshTokenRepository.save(refreshToken);
     }
 
     @Override

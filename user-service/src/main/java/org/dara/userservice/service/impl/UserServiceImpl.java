@@ -5,6 +5,7 @@ import org.dara.cryptoevent.Dto.AuthUserRegisteredEvent;
 import org.dara.cryptosecurity.model.CurrentUser;
 import org.dara.cryptosecurity.util.SecurityUtils;
 import org.dara.userservice.Exception.UserNotFoundException;
+import org.dara.userservice.dto.UserRequestDto;
 import org.dara.userservice.dto.UserResponseDto;
 import org.dara.userservice.mapper.UserMapper;
 import org.dara.userservice.model.User;
@@ -33,6 +34,7 @@ public class UserServiceImpl implements UserService {
         User newUser = new User();
         newUser.setUserUUID(event.userUUID());
         newUser.setUserName(event.username());
+        newUser.setEmail(event.email());
         userRepository.save(newUser);
     }
 
@@ -46,6 +48,20 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserResponseDto> getAllUsers() {
-        return List.of();
+        return userRepository.findAll().stream().map(userMapper::UserToUserResponseDto).toList();
+    }
+
+    @Transactional
+    @Override
+    public UserResponseDto updateCurrentUser(UserRequestDto userRequestDto) {
+        UUID userUUID = SecurityUtils.getCurrentUser().userUuid();
+
+        User user = userRepository.findByUserUUID(userUUID).orElseThrow(() -> new UserNotFoundException(userUUID.toString()));
+
+        user.setFullName(userRequestDto.fullName());
+        user.setPhone(userRequestDto.phone());
+        user.setBirthDate(userRequestDto.birthDate());
+
+        return userMapper.UserToUserResponseDto(user);
     }
 }

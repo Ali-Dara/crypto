@@ -25,6 +25,8 @@ public class User {
     @Column
     private String phone;
     @Column
+    private String email;
+    @Column
     private LocalDate birthDate;
     @Column(nullable = false, updatable = false)
     private LocalDate registerDate;

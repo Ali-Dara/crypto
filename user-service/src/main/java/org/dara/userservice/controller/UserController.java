@@ -1,12 +1,13 @@
 package org.dara.userservice.controller;
 
+import org.dara.userservice.dto.UserRequestDto;
 import org.dara.userservice.dto.UserResponseDto;
 import org.dara.userservice.service.UserService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/users")
@@ -23,8 +24,14 @@ public class UserController {
         return ResponseEntity.ok(userService.getCurrentUser());
     }
 
-    @PostMapping
-    public ResponseEntity<UserResponseDto> gatAllUsers() {
-        return ResponseEntity.noContent().build();
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/allUsers")
+    public ResponseEntity<List<UserResponseDto>> gatAllUsers() {
+        return ResponseEntity.ok(userService.getAllUsers());
+    }
+
+    @PostMapping("/me")
+    public ResponseEntity<UserResponseDto> updateCurrentUser(@RequestBody UserRequestDto userRequestDto) {
+        return ResponseEntity.ok(userService.updateCurrentUser(userRequestDto));
     }
 }

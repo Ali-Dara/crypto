@@ -83,7 +83,8 @@ public class AuthServiceImpl implements AuthService {
         AuthUserRegisteredEvent event =
                 new AuthUserRegisteredEvent(
                         user.getUserUuid(),
-                        user.getUsername()
+                        user.getUsername(),
+                        user.getEmail()
                 );
         outboxEventService.save(
                 user.getUserUuid(),

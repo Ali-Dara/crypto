@@ -18,7 +18,7 @@ public class OutboxPublisher {
     private final KafkaTemplate<String, Object> kafkaTemplate;
     private final ObjectMapper objectMapper;
 
-    @Scheduled(fixedDelay = 5000)
+    @Scheduled(fixedDelay = 100000)
     public void publishEvents() {
         List<OutboxEvent> events = outboxEventRepository.findTop100ByPublishedFalseOrderByCreatedAtAsc();
         for (OutboxEvent event : events) {

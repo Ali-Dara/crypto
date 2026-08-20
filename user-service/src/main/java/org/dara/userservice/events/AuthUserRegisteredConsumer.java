@@ -18,7 +18,7 @@ public class AuthUserRegisteredConsumer {
             containerFactory = "kafkaListenerContainerFactory"
     )
     public void consume(AuthUserRegisteredEvent event) {
-        throw new RuntimeException("TEST RETRY");
-        //userservice.createUserByRegisterEvent(event);
+        //throw new RuntimeException("TEST RETRY");
+        userservice.createUserByRegisterEvent(event);
     }
 }

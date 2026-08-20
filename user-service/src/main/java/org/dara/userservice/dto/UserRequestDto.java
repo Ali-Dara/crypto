@@ -3,7 +3,7 @@ package org.dara.userservice.dto;
 import java.time.LocalDate;
 
 public record UserRequestDto(
-        String name,
+        String fullName,
         String phone,
         LocalDate birthDate
 ) {}

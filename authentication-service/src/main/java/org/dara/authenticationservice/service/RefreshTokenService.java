@@ -1,7 +1,7 @@
 package org.dara.authenticationservice.service;
 
-import org.dara.authenticationservice.dto.AuthResponse;
 import org.dara.authenticationservice.dto.RefreshTokenRequest;
+import org.dara.authenticationservice.dto.RefreshTokenResponse;
 import org.dara.authenticationservice.model.AuthUser;
 import org.dara.authenticationservice.model.RefreshToken;
 
@@ -14,8 +14,8 @@ public interface RefreshTokenService {
     void delete(RefreshToken token);
     void deleteByAuthUser(AuthUser user);
     RefreshToken verify(String refreshToken) throws Exception;
-    AuthResponse refresh(RefreshTokenRequest request) throws Exception;
-    void revoke(String refreshToken);
+    RefreshTokenResponse refresh(RefreshTokenRequest request) throws Exception;
+    void revoke(RefreshToken refreshToken);
     void logout(Long userId, String refreshToken) throws Exception;
     void logoutAllSession(Long userId, String refreshToken) throws Exception;
 }
