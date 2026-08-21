@@ -13,6 +13,7 @@ import org.dara.authenticationservice.model.CustomUserDetails;
 import org.dara.authenticationservice.model.LoginEvent;
 import org.dara.authenticationservice.service.*;
 import org.dara.cryptoevent.Dto.AuthUserRegisteredEvent;
+import org.dara.cryptoevent.Dto.EmailVerificationRequestedEvent;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -33,8 +34,8 @@ public class AuthServiceImpl implements AuthService {
     private final RefreshTokenService refreshTokenService;
     private final RoleService roleService;
     private final ApplicationEventPublisher eventPublisher;
-    private final ApplicationEventPublisher applicationEventPublisher;
     private final OutboxEventService outboxEventService;
+    private EmailVerificationTokenService emailVerificationTokenService;
 
     @Override
     public AuthResponse login(LoginRequest loginRequest) throws UserNotFoundException {
@@ -76,21 +77,28 @@ public class AuthServiceImpl implements AuthService {
 
         authUserService.save(user);
 
-//        applicationEventPublisher.publishEvent(
-//                new AuthUserRegisteredEvent(user.getUserUuid(),
-//                                            user.getUsername())
-//        );
-        AuthUserRegisteredEvent event =
+        String verificationToken = emailVerificationTokenService.createToken(user.getUserUuid());
+
+        AuthUserRegisteredEvent authUserEvent =
                 new AuthUserRegisteredEvent(
                         user.getUserUuid(),
                         user.getUsername(),
                         user.getEmail()
                 );
+
+        EmailVerificationRequestedEvent emailVerificationEvent =
+                new EmailVerificationRequestedEvent(
+                      user.getUserUuid(),
+                      user.getEmail(),
+                      user.getUsername(),
+                      verificationToken
+                );
+
         outboxEventService.save(
                 user.getUserUuid(),
                 "AuthUserRegisteredEvent",
                 "auth.user.registered",
-                event
+                authUserEvent
         );
         return authUserMapper.authUserToAuthResponse(user);
     }

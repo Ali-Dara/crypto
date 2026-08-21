@@ -17,6 +17,10 @@ spring:
               uri: lb://USER-SERVICE
               predicates:
                 - Path=/users/**
+            - id: email-route
+              uri: lb://EMAIL-SERVICE
+              predicates:
+                - Path=/email/**
 
 crypto:
   security:

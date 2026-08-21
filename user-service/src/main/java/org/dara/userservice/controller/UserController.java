@@ -1,5 +1,6 @@
 package org.dara.userservice.controller;
 
+import jakarta.validation.Valid;
 import org.dara.userservice.dto.UserRequestDto;
 import org.dara.userservice.dto.UserResponseDto;
 import org.dara.userservice.service.UserService;
@@ -30,8 +31,8 @@ public class UserController {
         return ResponseEntity.ok(userService.getAllUsers());
     }
 
-    @PostMapping("/me")
-    public ResponseEntity<UserResponseDto> updateCurrentUser(@RequestBody UserRequestDto userRequestDto) {
+    @PutMapping("/me")
+    public ResponseEntity<UserResponseDto> updateCurrentUser(@Valid @RequestBody UserRequestDto userRequestDto) {
         return ResponseEntity.ok(userService.updateCurrentUser(userRequestDto));
     }
 }

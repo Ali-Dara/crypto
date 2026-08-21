@@ -29,7 +29,7 @@ public class AuthUser {
     private UUID userUuid;
     private boolean enabled = true;
     private boolean locked = false;
-
+    private boolean emailVerified = false;
     @OneToMany(mappedBy = "user",
                cascade = CascadeType.ALL)
     private Set<UserRole> userRoles = new HashSet<>();;

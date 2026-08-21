@@ -1,0 +1,10 @@
+### Send POST request with json body
+PUT http://localhost:8000/auth/users/me
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJwZXJtaXNzaW9ucyI6W10sInJvbGVzIjpbIlJPTEVfQURNSU4iXSwidXNlclVVSUQiOiIxN2I4OTRhMC01MWVhLTQ2NTktODE1OC02MDMwMDI1MTk2NmUiLCJ1c2VySWQiOjExLCJlbWFpbCI6ImFsaXJlemEuYWxpRGFyYUBnbWFpbC5jb20iLCJzdWIiOiJhbGlEYXJhMTM3NiIsImV4cCI6MTc4NzMwMjg0NCwiaWF0IjoxNzg3MzAyNTQ0fQ.EJTYZkmz_Y31npNB4dAy56oFrYgzZNOte61QcSWu42c
+Content-Type: application/json
+
+{
+  "fullName": "",
+  "phone": "abc",
+  "birthDate": "2030-01-01"
+}
