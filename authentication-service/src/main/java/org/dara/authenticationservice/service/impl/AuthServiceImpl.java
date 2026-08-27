@@ -35,7 +35,7 @@ public class AuthServiceImpl implements AuthService {
     private final RoleService roleService;
     private final ApplicationEventPublisher eventPublisher;
     private final OutboxEventService outboxEventService;
-    private EmailVerificationTokenService emailVerificationTokenService;
+    private final EmailVerificationTokenService emailVerificationTokenService;
 
     @Override
     public AuthResponse login(LoginRequest loginRequest) throws UserNotFoundException {
@@ -100,6 +100,14 @@ public class AuthServiceImpl implements AuthService {
                 "auth.user.registered",
                 authUserEvent
         );
+
+        outboxEventService.save(
+                user.getUserUuid(),
+                "EmailVerificationRequestedEvent",
+                "email.verification.requested",
+                emailVerificationEvent
+        );
+
         return authUserMapper.authUserToAuthResponse(user);
     }
 }

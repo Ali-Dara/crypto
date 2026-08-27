@@ -9,7 +9,6 @@ import org.dara.authenticationservice.service.EmailVerificationTokenService;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -33,7 +32,7 @@ public class EmailVerificationTokenServiceImpl implements EmailVerificationToken
     @Transactional
     public EmailVerificationToken verifyToken(String token) {
         String hashToken = DigestUtils.sha256Hex(token);
-        EmailVerificationToken emailVerificationToken = repository.findByHashToken(hashToken)
+        EmailVerificationToken emailVerificationToken = repository.findByTokenHash(hashToken)
                 .orElseThrow(() -> new IllegalArgumentException("email Verification Token Not found"));
 
         if(emailVerificationToken.isUsed())

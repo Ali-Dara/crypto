@@ -32,5 +32,6 @@ public class EmailVerificationToken {
         this.userUuid = userUuid;
         this.tokenHash = tokenHash;
         this.expiresAt = expiresAt;
+        this.createdAt = LocalDateTime.now();
     }
 }
