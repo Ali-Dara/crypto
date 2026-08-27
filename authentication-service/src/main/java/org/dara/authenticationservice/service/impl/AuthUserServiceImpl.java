@@ -8,6 +8,7 @@ import org.dara.authenticationservice.service.AuthUserService;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -24,6 +25,11 @@ public class AuthUserServiceImpl implements AuthUserService {
     @Override
     public Optional<AuthUser> findByUsername(String username) {
         return authUserRepository.findByUsername(username);
+    }
+
+    @Override
+    public Optional<AuthUser> findByUserUuid(UUID uuid) {
+        return authUserRepository.findByUserUuid(uuid);
     }
 
     @Override

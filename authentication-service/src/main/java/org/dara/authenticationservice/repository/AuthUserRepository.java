@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.Optional;
+import java.util.UUID;
 
 public interface AuthUserRepository extends JpaRepository<AuthUser, Long> {
 
@@ -23,4 +24,5 @@ public interface AuthUserRepository extends JpaRepository<AuthUser, Long> {
         where u.username = :username
     """)
     Optional<AuthUser> findByUsernameWithAuthorities(@Param("username") String username);
+    Optional<AuthUser> findByUserUuid(UUID uuid);
 }

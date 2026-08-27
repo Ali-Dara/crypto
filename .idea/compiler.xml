@@ -26,12 +26,13 @@
         </processorPath>
         <module name="crypto-event" />
         <module name="authentication-service" />
+        <module name="email-service" />
         <module name="api-gateway" />
         <module name="crypto-security" />
         <module name="user-service" />
         <module name="discovery-service" />
       </profile>
-      <profile name="Annotation profile for email-service" enabled="true">
+      <profile name="Annotation profile for wallet-service" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
@@ -42,7 +43,7 @@
           <entry name="$MAVEN_REPOSITORY$/org/mapstruct/mapstruct/1.6.3/mapstruct-1.6.3.jar" />
           <entry name="$MAVEN_REPOSITORY$/org/springframework/boot/spring-boot-configuration-processor/4.1.0/spring-boot-configuration-processor-4.1.0.jar" />
         </processorPath>
-        <module name="email-service" />
+        <module name="wallet-service" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
@@ -62,6 +63,7 @@
       <module name="management-service" options="-parameters" />
       <module name="user-serive" options="-parameters" />
       <module name="user-service" options="-parameters" />
+      <module name="wallet-service" options="-parameters" />
     </option>
   </component>
 </project>

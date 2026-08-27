@@ -53,6 +53,7 @@ public class SecurityConfig {
                                                                             .requestMatchers(
                                                                                     "/auth/login",
                                                                                     "/auth/refresh",
+                                                                                    "/auth/verify-email",
                                                                                     "/registering/**"
                                                                                 ).permitAll().anyRequest().authenticated())
                 //.exceptionHandling(ex -> ex.authenticationEntryPoint(new JwtAuthenticationEntryPoint()))

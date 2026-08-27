@@ -44,6 +44,7 @@ public class SecurityConfig {
                                 .requestMatchers("/actuator/**",
                                                  "/auth/login",
                                                  "/auth/refresh",
+                                                 "/auth/verify-email",
                                                  "/registering/**").permitAll()
                                 .anyRequest().authenticated())
                 .oauth2ResourceServer(oauth -> oauth.jwt(jwt ->jwt.jwtAuthenticationConverter(customJwtAuthenticationConverter)))

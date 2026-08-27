@@ -3,8 +3,14 @@ package org.dara.authenticationservice.service.impl;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.dara.authenticationservice.Exception.EmailVerificationTokenAlreadyUsedException;
+import org.dara.authenticationservice.Exception.EmailVerificationTokenExpiredException;
+import org.dara.authenticationservice.Exception.EmailVerificationTokenNotFoundException;
+import org.dara.authenticationservice.Exception.UserNotFoundException;
+import org.dara.authenticationservice.model.AuthUser;
 import org.dara.authenticationservice.model.EmailVerificationToken;
 import org.dara.authenticationservice.repository.EmailVerificationTokenRepository;
+import org.dara.authenticationservice.service.AuthUserService;
 import org.dara.authenticationservice.service.EmailVerificationTokenService;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +22,7 @@ import java.util.UUID;
 public class EmailVerificationTokenServiceImpl implements EmailVerificationTokenService {
 
     private final EmailVerificationTokenRepository repository;
+    private final AuthUserService authUserService;
 
     @Override
     @Transactional
@@ -33,13 +40,21 @@ public class EmailVerificationTokenServiceImpl implements EmailVerificationToken
     public EmailVerificationToken verifyToken(String token) {
         String hashToken = DigestUtils.sha256Hex(token);
         EmailVerificationToken emailVerificationToken = repository.findByTokenHash(hashToken)
-                .orElseThrow(() -> new IllegalArgumentException("email Verification Token Not found"));
+                .orElseThrow(EmailVerificationTokenNotFoundException::new);
 
         if(emailVerificationToken.isUsed())
-            throw new IllegalArgumentException("email Verification Token already used");
+            throw new EmailVerificationTokenAlreadyUsedException();
 
         if(emailVerificationToken.getExpiresAt().isBefore(LocalDateTime.now()))
-            throw new IllegalArgumentException("email Verification Token expired");
+            throw new EmailVerificationTokenExpiredException();
+
+        emailVerificationToken.setUsed(true);
+        repository.save(emailVerificationToken);
+
+        AuthUser authUser = authUserService.findByUserUuid(emailVerificationToken.getUserUuid()).orElseThrow(UserNotFoundException::new);
+
+        authUser.setEmailVerified(true);
+        authUserService.save(authUser);
 
         return emailVerificationToken;
     }
