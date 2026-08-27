@@ -1,0 +1,27 @@
+server:
+  port: 8005
+
+spring:
+  application:
+    name: wallet-service
+  datasource:
+    url: jdbc:postgresql://localhost:5002/wallet-db
+    username: admin
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+
+crypto:
+  security:
+    jwt:
+      secret-key: 4mA5LQm6W9xZ2pR8sV1nB3cD7fG0hJkL9pQ2rT5yU8iO1aS4dF
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
