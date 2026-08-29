@@ -19,14 +19,14 @@ public class WalletServiceImpl implements WalletService {
     @Transactional
     @Override
     public Wallet createWallet(UUID userUuid) {
-        if(walletRepository.existsByUuid(userUuid)) {
-            return walletRepository.findByUuid(userUuid).orElseThrow();
+        if(walletRepository.existsByUserUuid(userUuid)) {
+            return walletRepository.findByUserUuid(userUuid).orElseThrow();
         }
         return walletRepository.save(new Wallet(userUuid));
     }
 
     @Override
     public Optional<Wallet> findWalletByUserUuid(UUID userUuid) {
-        return walletRepository.findByUuid(userUuid);
+        return walletRepository.findByUserUuid(userUuid);
     }
 }

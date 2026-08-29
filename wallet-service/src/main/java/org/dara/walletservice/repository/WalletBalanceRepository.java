@@ -8,7 +8,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Repository
-public interface WalletBalanceRepository extends JpaRepository<WalletBalance, UUID> {
+public interface WalletBalanceRepository extends JpaRepository<WalletBalance, Long> {
 
     Optional<WalletBalance> findByWalletId(Long walletId);
 }
