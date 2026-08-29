@@ -1,6 +1,6 @@
 package org.dara.walletservice.repository;
 
-import org.dara.walletservice.model.Wallet;
+import org.dara.walletservice.model.WalletBalance;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -8,8 +8,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Repository
-public interface WalletRepository extends JpaRepository<Wallet, Long> {
+public interface WalletBalanceRepository extends JpaRepository<WalletBalance, UUID> {
 
-    Optional<Wallet> findByUuid(UUID uuid);
-    boolean existsByUuid(UUID uuid);
+    Optional<WalletBalance> findByWalletId(Long walletId);
 }

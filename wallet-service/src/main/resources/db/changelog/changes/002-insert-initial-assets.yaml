@@ -1,0 +1,22 @@
+databaseChangeLog:
+
+  - changeSet:
+      id: 002-insert-initial-assets
+      author: dara
+      changes:
+
+        - insert:
+            tableName: assets
+            columns:
+              - column:
+                  name: name
+                  value: Bitcoin
+              - column:
+                  name: symbol
+                  value: BTC
+              - column:
+                  name: type
+                  value: CRYPTO
+              - column:
+                  name: active
+                  valueBoolean: true
