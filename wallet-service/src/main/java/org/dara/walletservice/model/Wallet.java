@@ -38,6 +38,12 @@ public class Wallet {
     public Wallet(UUID userUuid) {
         this.userUuid = userUuid;
         this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    protected void preUpdate() {
+        this.updatedAt = LocalDateTime.now();
     }
 
 }
