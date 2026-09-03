@@ -1,0 +1,207 @@
+services:
+
+  discovery-service:
+    build:
+      context: .
+      dockerfile: discovery-service/Dockerfile
+    container_name: discovery-service
+    ports:
+      - "8761:8761"
+    networks:
+      - crypto-network
+
+  authentication-service:
+    build:
+      context: .
+      dockerfile: authentication-service/Dockerfile
+    container_name: authentication-service
+    ports:
+      - "8001:8001"
+    depends_on:
+      - discovery-service
+      - auth-db
+      - kafka
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://auth-db:5432/db
+      SPRING_DATASOURCE_USERNAME: admin
+      SPRING_DATASOURCE_PASSWORD: postgres
+      EUREKA_URL: http://discovery-service:8761/eureka
+      KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+      SECRET_KEY: ${SECRET_KEY}
+    networks:
+      - crypto-network
+
+  user-service:
+    build:
+      context: .
+      dockerfile: user-service/Dockerfile
+    container_name: user-service
+    ports:
+      - "8002:8002"
+    depends_on:
+      - discovery-service
+      - user-db
+      - kafka
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://user-db:5432/db
+      SPRING_DATASOURCE_USERNAME: admin
+      SPRING_DATASOURCE_PASSWORD: postgres
+      EUREKA_URL: http://discovery-service:8761/eureka
+      KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+      SECRET_KEY: ${SECRET_KEY}
+    networks:
+      - crypto-network
+
+  email-service:
+    build:
+      context: .
+      dockerfile: email-service/Dockerfile
+    container_name: email-service
+    ports:
+      - "8004:8004"
+    depends_on:
+      - discovery-service
+      - kafka
+    environment:
+      EUREKA_URL: http://discovery-service:8761/eureka
+      KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+      MAIL_USERNAME: ${MAIL_USERNAME}
+      MAIL_PASSWORD: ${MAIL_PASSWORD}
+    networks:
+      - crypto-network
+
+  wallet-service:
+    build:
+      context: .
+      dockerfile: wallet-service/Dockerfile
+    container_name: wallet-service
+    ports:
+      - "8005:8005"
+    depends_on:
+      - discovery-service
+      - wallet-db
+      - kafka
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://wallet-db:5432/wallet-db
+      SPRING_DATASOURCE_USERNAME: admin
+      SPRING_DATASOURCE_PASSWORD: postgres
+      EUREKA_URL: http://discovery-service:8761/eureka
+      KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+      SECRET_KEY: ${SECRET_KEY}
+    networks:
+      - crypto-network
+
+  api-gateway:
+    build:
+      context: .
+      dockerfile: api-gateway/Dockerfile
+    container_name: api-gateway
+    ports:
+      - "8000:8000"
+    depends_on:
+      - discovery-service
+      - authentication-service
+      - user-service
+      - email-service
+      - wallet-service
+    environment:
+      EUREKA_URL: http://discovery-service:8761/eureka
+      SECRET_KEY: ${SECRET_KEY}
+    networks:
+      - crypto-network
+
+  auth-db:
+    image: postgres:18
+    container_name: auth-db
+    environment:
+      POSTGRES_DB: db
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5001:5432"
+    volumes:
+      - auth-db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U admin -d db"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - crypto-network
+
+  user-db:
+    image: postgres:18
+    container_name: user-db
+    environment:
+      POSTGRES_DB: db
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5002:5432"
+    volumes:
+      - user-db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U admin -d db"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - crypto-network
+
+  wallet-db:
+    image: postgres:18
+    container_name: wallet-db
+    environment:
+      POSTGRES_DB: wallet-db
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5003:5432"
+    volumes:
+      - wallet-db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U admin -d wallet-db"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - crypto-network
+
+  kafka:
+    image: apache/kafka:4.0.1
+    container_name: crypto-kafka
+    ports:
+      - "9092:9092"
+      - "9094:9094"
+    environment:
+      KAFKA_NODE_ID: 1
+      KAFKA_PROCESS_ROLES: broker,controller
+      KAFKA_LISTENERS: INTERNAL://:9092,EXTERNAL://:9094,CONTROLLER://:9093
+      KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka:9092,EXTERNAL://localhost:9094
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_CONTROLLER_QUORUM_VOTERS: 1@kafka:9093
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT,CONTROLLER:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+    volumes:
+      - kafka-data:/var/lib/kafka/data
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/kafka/bin/kafka-broker-api-versions.sh --bootstrap-server localhost:9092 >/dev/null 2>&1 || exit 1"]
+      interval: 10s
+      timeout: 10s
+      retries: 10
+    networks:
+      - crypto-network
+
+volumes:
+  auth-db-data:
+  user-db-data:
+  wallet-db-data:
+  kafka-data:
+
+networks:
+  crypto-network:
+    driver: bridge
