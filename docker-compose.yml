@@ -18,13 +18,17 @@ services:
     ports:
       - "8001:8001"
     depends_on:
-      - discovery-service
-      - auth-db
-      - kafka
+      auth-db:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
+      discovery-service:
+        condition: service_started
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://auth-db:5432/db
-      SPRING_DATASOURCE_USERNAME: admin
-      SPRING_DATASOURCE_PASSWORD: postgres
+      DB_HOST: auth-db
+      DB_PORT: 5432
+      DB_USERNAME: admin
+      DB_PASSWORD: postgres
       EUREKA_URL: http://discovery-service:8761/eureka
       KAFKA_BOOTSTRAP_SERVERS: kafka:9092
       SECRET_KEY: ${SECRET_KEY}
@@ -39,13 +43,17 @@ services:
     ports:
       - "8002:8002"
     depends_on:
-      - discovery-service
-      - user-db
-      - kafka
+      user-db:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
+      discovery-service:
+        condition: service_started
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://user-db:5432/db
-      SPRING_DATASOURCE_USERNAME: admin
-      SPRING_DATASOURCE_PASSWORD: postgres
+      DB_HOST: user-db
+      DB_PORT: 5432
+      DB_USERNAME: admin
+      DB_PASSWORD: postgres
       EUREKA_URL: http://discovery-service:8761/eureka
       KAFKA_BOOTSTRAP_SERVERS: kafka:9092
       SECRET_KEY: ${SECRET_KEY}
@@ -60,8 +68,10 @@ services:
     ports:
       - "8004:8004"
     depends_on:
-      - discovery-service
-      - kafka
+      kafka:
+        condition: service_healthy
+      discovery-service:
+        condition: service_started
     environment:
       EUREKA_URL: http://discovery-service:8761/eureka
       KAFKA_BOOTSTRAP_SERVERS: kafka:9092
@@ -78,13 +88,17 @@ services:
     ports:
       - "8005:8005"
     depends_on:
-      - discovery-service
-      - wallet-db
-      - kafka
+      wallet-db:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
+      discovery-service:
+        condition: service_started
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://wallet-db:5432/wallet-db
-      SPRING_DATASOURCE_USERNAME: admin
-      SPRING_DATASOURCE_PASSWORD: postgres
+      DB_HOST: wallet-db
+      DB_PORT: 5432
+      DB_USERNAME: admin
+      DB_PASSWORD: postgres
       EUREKA_URL: http://discovery-service:8761/eureka
       KAFKA_BOOTSTRAP_SERVERS: kafka:9092
       SECRET_KEY: ${SECRET_KEY}
@@ -120,7 +134,7 @@ services:
     ports:
       - "5001:5432"
     volumes:
-      - auth-db-data:/var/lib/postgresql/data
+      - auth-db-data:/var/lib/postgresql
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U admin -d db"]
       interval: 5s
@@ -139,7 +153,7 @@ services:
     ports:
       - "5002:5432"
     volumes:
-      - user-db-data:/var/lib/postgresql/data
+      - user-db-data:/var/lib/postgresql
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U admin -d db"]
       interval: 5s
@@ -158,7 +172,7 @@ services:
     ports:
       - "5003:5432"
     volumes:
-      - wallet-db-data:/var/lib/postgresql/data
+      - wallet-db-data:/var/lib/postgresql
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U admin -d wallet-db"]
       interval: 5s
