@@ -15,6 +15,7 @@
         <option value="$PROJECT_DIR$/crypto-event/pom.xml" />
         <option value="$PROJECT_DIR$/email-service/pom.xml" />
         <option value="$PROJECT_DIR$/wallet-service/pom.xml" />
+        <option value="$PROJECT_DIR$/market-service/pom.xml" />
       </list>
     </option>
     <option name="ignoredFiles">

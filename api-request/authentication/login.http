@@ -3,6 +3,6 @@ POST http://localhost:8000/auth/login
 Content-Type: application/json
 
 {
-  "username": "dara",
-  "password": "584454"
+  "username": "softwareEngineer",
+  "password": "1234"
 }

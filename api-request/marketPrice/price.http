@@ -1,0 +1,6 @@
+### GET request to example server
+#GET http://localhost:8006/market/test-price
+
+#GET http://localhost:8006/market/prices
+
+GET http://localhost:8006/market/prices/BTC

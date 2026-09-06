@@ -1,8 +1,9 @@
 databaseChangeLog:
 
   - changeSet:
-      id: 002-insert-initial-assets
+      id: 004-seed-assets
       author: dara
+
       changes:
 
         - insert:
@@ -17,6 +18,54 @@ databaseChangeLog:
               - column:
                   name: type
                   value: CRYPTO
+              - column:
+                  name: active
+                  valueBoolean: true
+
+        - insert:
+            tableName: assets
+            columns:
+              - column:
+                  name: name
+                  value: Ethereum
+              - column:
+                  name: symbol
+                  value: ETH
+              - column:
+                  name: type
+                  value: CRYPTO
+              - column:
+                  name: active
+                  valueBoolean: true
+
+        - insert:
+            tableName: assets
+            columns:
+              - column:
+                  name: name
+                  value: Tether USD
+              - column:
+                  name: symbol
+                  value: USDT
+              - column:
+                  name: type
+                  value: STABLE_COIN
+              - column:
+                  name: active
+                  valueBoolean: true
+
+        - insert:
+            tableName: assets
+            columns:
+              - column:
+                  name: name
+                  value: USD Coin
+              - column:
+                  name: symbol
+                  value: USDC
+              - column:
+                  name: type
+                  value: STABLE_COIN
               - column:
                   name: active
                   valueBoolean: true

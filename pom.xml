@@ -133,6 +133,7 @@
         <module>discovery-service</module>
         <module>crypto-event</module>
         <module>wallet-service</module>
+        <module>market-service</module>
     </modules>
 
 </project>
