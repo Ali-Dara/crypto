@@ -1,0 +1,17 @@
+server:
+  port: 8006
+
+spring:
+  application:
+    name: market-service
+
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_URL:http://localhost:8761/eureka}
+
+market:
+  provider:
+    coingecko:
+      base-url: https://api.coingecko.com/api/v3
+      api-key: ${COINGECKO_API_KEY}
