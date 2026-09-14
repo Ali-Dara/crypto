@@ -5,6 +5,10 @@ spring:
   application:
     name: market-service
 
+  grpc:
+    server:
+      port: 9090
+
 eureka:
   client:
     service-url:

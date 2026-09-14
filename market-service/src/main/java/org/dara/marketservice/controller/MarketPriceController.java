@@ -13,7 +13,7 @@ import java.util.Map;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/market")
-public class MarketTestController {
+public class MarketPriceController {
 
     private final MarketPriceService marketPriceService;
 

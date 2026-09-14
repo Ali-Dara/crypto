@@ -27,8 +27,12 @@
         <lombok-mapstruct-binding.version>0.2.0</lombok-mapstruct-binding.version>
         <jjwt.version>0.12.7</jjwt.version>
         <springdoc.version>3.0.1</springdoc.version>
+        <grpc.version>1.75.0</grpc.version>
+        <protobuf.version>4.32.0</protobuf.version>
+        <protobuf.plugin.version>0.6.1</protobuf.plugin.version>
         <crypto-security.version>1.0.0</crypto-security.version>
         <crypto-events.version>1.0.0</crypto-events.version>
+        <crypto-market-contract>1.0.0</crypto-market-contract>
     </properties>
 
     <dependencyManagement>
@@ -85,10 +89,24 @@
                 <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
                 <version>${springdoc.version}</version>
             </dependency>
+            <dependency>
+                <groupId>io.grpc</groupId>
+                <artifactId>grpc-bom</artifactId>
+                <version>${grpc.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
     <build>
+        <extensions>
+            <extension>
+                <groupId>kr.motd.maven</groupId>
+                <artifactId>os-maven-plugin</artifactId>
+                <version>1.7.1</version>
+            </extension>
+        </extensions>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -120,18 +138,44 @@
                     </annotationProcessorPaths>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.xolstice.maven.plugins</groupId>
+                <artifactId>protobuf-maven-plugin</artifactId>
+                <version>${protobuf.plugin.version}</version>
 
+                <configuration>
+                    <protocArtifact>
+                        com.google.protobuf:protoc:${protobuf.version}:exe:${os.detected.classifier}
+                    </protocArtifact>
+
+                    <pluginId>grpc-java</pluginId>
+
+                    <pluginArtifact>
+                        io.grpc:protoc-gen-grpc-java:${grpc.version}:exe:${os.detected.classifier}
+                    </pluginArtifact>
+                </configuration>
+
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>compile</goal>
+                            <goal>compile-custom</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 
     <modules>
         <module>crypto-security</module>
+        <module>discovery-service</module>
         <module>api-gateway</module>
         <module>authentication-service</module>
         <module>user-service</module>
         <module>email-service</module>
-        <module>discovery-service</module>
         <module>crypto-event</module>
+        <module>crypto-market-contract</module>
         <module>wallet-service</module>
         <module>market-service</module>
     </modules>

@@ -3,4 +3,11 @@
 
 #GET http://localhost:8006/market/prices
 
-GET http://localhost:8006/market/prices/BTC
+##GET http://localhost:8006/market/prices/BTC
+
+@accessToken = YOUR_ACCESS_TOKEN
+
+### Test Market gRPC
+GET http://localhost:8005/wallet/me
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJwZXJtaXNzaW9ucyI6WyJSRUFEIl0sInJvbGVzIjpbIlJPTEVfVVNFUiJdLCJ1c2VyVVVJRCI6IjAyMzU2NTE0LTY2YmMtNDg4Mi1iZWNjLTkxNjkyMzFhZWYyYSIsInVzZXJJZCI6MzgsImVtYWlsIjoiZGFyYWVpYWxpcmV6YTc2QGdtYWlsLmNvbSIsInN1YiI6InNvZnR3YXJlRW5naW5lZXIiLCJleHAiOjE3ODkwODE0ODQsImlhdCI6MTc4OTA4MTE4NH0.qhgHU-CuLkCmDsg42g5a1BCmMNACtF4vwOa-YUCXSPM
+Accept: application/json

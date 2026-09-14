@@ -11,4 +11,5 @@ public interface WalletService {
     Wallet createWallet(UUID userUuid);
     Optional<Wallet> findWalletByUserUuid(UUID userUuid);
     void deposit(UUID userUuid, String symbol, BigDecimal amount);
+    BigDecimal calculateTotalBalance(UUID userId);
 }

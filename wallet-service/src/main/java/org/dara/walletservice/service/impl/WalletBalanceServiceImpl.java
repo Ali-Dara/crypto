@@ -14,6 +14,7 @@ import org.dara.walletservice.repository.WalletRepository;
 import org.dara.walletservice.service.WalletBalanceService;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -33,5 +34,11 @@ public class WalletBalanceServiceImpl implements WalletBalanceService {
         Asset asset = assetRepository.findBySymbol(assetSymbol).orElseThrow(() -> new AssetNotFoundException("Asset Not Found"));
         return  walletBalanceRepository.findByWalletIdAndAssetId(wallet.getId(), asset.getId())
                                             .orElseThrow(() -> new WalletBalanceNotFoundException("Wallet balance not found"));
+    }
+
+    @Override
+    public List<WalletBalance> findAllBalances(UUID userId) {
+        Wallet wallet = walletRepository.findByUserUuid(userId).orElseThrow(() -> new WalletNotFoundException("Wallet Not Found"));
+        return walletBalanceRepository.findAllByWalletId(wallet.getId());
     }
 }

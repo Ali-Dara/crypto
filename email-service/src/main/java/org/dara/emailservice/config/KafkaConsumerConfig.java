@@ -4,7 +4,7 @@ import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.apache.kafka.common.serialization.StringSerializer;
-import org.dara.cryptoevent.Dto.AuthUserRegisteredEvent;
+import org.dara.cryptoevent.Dto.EmailVerificationRequestedEvent;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -26,7 +26,7 @@ import java.util.Map;
 public class KafkaConsumerConfig {
 
     @Bean
-    public ConsumerFactory<String, AuthUserRegisteredEvent> consumerFactory(KafkaProperties kafkaProperties) {
+    public ConsumerFactory<String, EmailVerificationRequestedEvent> consumerFactory(KafkaProperties kafkaProperties) {
 
         Map<String, Object> properties = new HashMap<>();
 
@@ -48,14 +48,14 @@ public class KafkaConsumerConfig {
         return new DefaultKafkaConsumerFactory<>(
                 properties,
                 new StringDeserializer(),
-                new JacksonJsonDeserializer<>(AuthUserRegisteredEvent.class)
+                new JacksonJsonDeserializer<>(EmailVerificationRequestedEvent.class)
         );
     }
 
     @Bean
-    public ConcurrentKafkaListenerContainerFactory<String, AuthUserRegisteredEvent> kafkaListenerContainerFactory(ConsumerFactory<String, AuthUserRegisteredEvent> consumerFactory, DefaultErrorHandler errorHandler) {
+    public ConcurrentKafkaListenerContainerFactory<String, EmailVerificationRequestedEvent> kafkaListenerContainerFactory(ConsumerFactory<String, EmailVerificationRequestedEvent> consumerFactory, DefaultErrorHandler errorHandler) {
 
-        ConcurrentKafkaListenerContainerFactory<String, AuthUserRegisteredEvent> factory = new ConcurrentKafkaListenerContainerFactory<>();
+        ConcurrentKafkaListenerContainerFactory<String, EmailVerificationRequestedEvent> factory = new ConcurrentKafkaListenerContainerFactory<>();
 
         factory.setConsumerFactory(consumerFactory);
         factory.setCommonErrorHandler(errorHandler);

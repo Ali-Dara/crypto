@@ -4,6 +4,7 @@
     <file url="file://$PROJECT_DIR$/api-gateway/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/authentication-service/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/crypto-event/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/crypto-market-contract/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/crypto-security/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/discovery-service/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/email-service/src/main/java" charset="UTF-8" />

@@ -9,7 +9,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @Component
 public class PriceCache {
 
-    ConcurrentHashMap<String, BigDecimal> priceCache = new ConcurrentHashMap<String, BigDecimal>();
+    private ConcurrentHashMap<String, BigDecimal> priceCache = new ConcurrentHashMap<String, BigDecimal>();
 
     public void update(String symbol, BigDecimal price) {
         priceCache.put(symbol, price);

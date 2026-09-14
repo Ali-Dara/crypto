@@ -28,3 +28,8 @@ crypto:
       secret-key: ${SECRET_KEY}
   kafka:
     bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9094}
+
+market:
+  grpc:
+    host: ${MARKET_GRPC_HOST:localhost}
+    port: ${MARKET_GRPC_PORT:9090}

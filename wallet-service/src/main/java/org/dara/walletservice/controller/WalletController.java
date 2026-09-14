@@ -13,6 +13,7 @@ import org.dara.walletservice.dto.ErrorResponse;
 import org.dara.walletservice.dto.WalletBalanceResponse;
 import org.dara.walletservice.dto.WalletResponse;
 import org.dara.walletservice.exception.WalletNotFoundException;
+import org.dara.walletservice.grpcClient.MarketGrpcClient;
 import org.dara.walletservice.mapper.WalletMapper;
 import org.dara.walletservice.model.Wallet;
 import org.dara.walletservice.model.WalletBalance;
@@ -25,6 +26,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @RestController
@@ -54,7 +58,15 @@ public class WalletController {
     public ResponseEntity<WalletResponse> getMyWallet(@AuthenticationPrincipal CurrentUser currentUser) {
         UUID userUuid = currentUser.userUuid();
         Wallet wallet = walletService.findWalletByUserUuid(userUuid).orElseThrow(() -> new WalletNotFoundException("Wallet not found"));
-        return ResponseEntity.ok(walletMapper.walletToWalletResponse(wallet));
+        WalletResponse walletResponse = walletMapper.walletToWalletResponse(wallet);
+        BigDecimal totalWalletBalance = walletService.calculateTotalBalance(userUuid);
+        walletResponse = new WalletResponse(
+                walletResponse.id(),
+                walletResponse.userUuid(),
+                walletResponse.walletBalances(),
+                totalWalletBalance
+        );
+        return ResponseEntity.ok(walletResponse);
     }
 
 

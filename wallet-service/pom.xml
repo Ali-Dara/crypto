@@ -104,6 +104,26 @@
             <artifactId>spring-boot-starter-liquibase</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>org.dara</groupId>
+            <artifactId>crypto-market-contract</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.grpc</groupId>
+            <artifactId>grpc-netty-shaded</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.grpc</groupId>
+            <artifactId>grpc-stub</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.grpc</groupId>
+            <artifactId>grpc-protobuf</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
