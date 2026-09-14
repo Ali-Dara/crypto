@@ -34,4 +34,7 @@ public class Asset {
     @OneToMany(mappedBy = "asset")
     private Set<WalletBalance> walletBalances = new HashSet<>();
 
+    @OneToMany(mappedBy = "asset")
+    private HashSet<Deposit> deposits;
+
 }

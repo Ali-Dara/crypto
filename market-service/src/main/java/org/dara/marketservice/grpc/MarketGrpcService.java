@@ -25,6 +25,8 @@ public class MarketGrpcService extends MarketServiceGrpc.MarketServiceImplBase {
 
         for(String symbol: request.getSymbolsList()){
             BigDecimal price = priceCache.getPrice(symbol);
+            if (price == null)
+                continue;
             AssetPrice assetPrice = AssetPrice.newBuilder()
                     .setSymbol(symbol.toUpperCase())
                     .setPrice(price.toPlainString())

@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.dara.cryptosecurity.model.CurrentUser;
 import org.dara.walletservice.dto.ErrorResponse;
+import org.dara.walletservice.dto.TotalWalletBalanceResponse;
 import org.dara.walletservice.dto.WalletBalanceResponse;
 import org.dara.walletservice.dto.WalletResponse;
 import org.dara.walletservice.exception.WalletNotFoundException;
@@ -100,5 +101,10 @@ public class WalletController {
     public ResponseEntity<WalletBalanceResponse> getMyWalletBalance(@AuthenticationPrincipal CurrentUser currentUser, @PathVariable String symbol) {
         WalletBalance walletBalance = walletBalanceService.findBalance(currentUser.userUuid(), symbol);
         return ResponseEntity.ok(walletMapper.walletBalanceToWalletBalanceResponse(walletBalance));
+    }
+
+    @GetMapping("/me/balances/total-balance")
+    public ResponseEntity<TotalWalletBalanceResponse> getTotalWalletBalance(@AuthenticationPrincipal CurrentUser currentUser) {
+        return ResponseEntity.ok(new TotalWalletBalanceResponse(walletService.calculateTotalBalance(currentUser.userUuid())));
     }
 }

@@ -35,6 +35,9 @@ public class Wallet {
                orphanRemoval = true)
     private Set<WalletBalance> walletBalances = new HashSet<>();
 
+    @OneToMany(mappedBy = "wallet")
+    private Set<Deposit> deposits = new HashSet<>();
+
     public Wallet(UUID userUuid) {
         this.userUuid = userUuid;
         this.createdAt = LocalDateTime.now();
