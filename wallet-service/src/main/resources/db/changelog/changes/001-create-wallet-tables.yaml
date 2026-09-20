@@ -216,3 +216,174 @@ databaseChangeLog:
            referencedTableName: assets
            referencedColumnNames: id
            constraintName: fk_deposits_asset
+
+
+  - changeSet:
+      id: 005-create-envers-revinfo
+      author: dara
+
+      changes:
+        - createTable:
+            tableName: revinfo
+            columns:
+              - column:
+                  name: rev
+                  type: INTEGER
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+
+              - column:
+                  name: revtstmp
+                  type: BIGINT
+
+
+  - changeSet:
+      id: 006-create-deposits-aud
+      author: dara
+
+      changes:
+        - createTable:
+            tableName: deposits_aud
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: rev
+                  type: INTEGER
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: revtype
+                  type: SMALLINT
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: amount
+                  type: DECIMAL(38,18)
+
+              - column:
+                  name: status
+                  type: VARCHAR(30)
+
+              - column:
+                  name: wallet_id
+                  type: BIGINT
+
+              - column:
+                  name: asset_id
+                  type: BIGINT
+
+              - column:
+                  name: created_at
+                  type: TIMESTAMP
+
+              - column:
+                  name: updated_at
+                  type: TIMESTAMP
+
+              - column:
+                  name: created_by
+                  type: UUID
+
+              - column:
+                  name: updated_by
+                  type: UUID
+
+        - addPrimaryKey:
+            tableName: deposits_aud
+            columnNames: id, rev
+            constraintName: pk_deposits_aud
+
+        - addForeignKeyConstraint:
+            baseTableName: deposits_aud
+            baseColumnNames: rev
+            referencedTableName: revinfo
+            referencedColumnNames: rev
+            constraintName: fk_deposits_aud_rev
+
+  - changeSet:
+      id: 007-create-wallet-balances-aud
+      author: dara
+
+      changes:
+        - createTable:
+            tableName: wallet_balances_aud
+            columns:
+
+              - column:
+                  name: id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: rev
+                  type: INTEGER
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: revtype
+                  type: SMALLINT
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: available_balance
+                  type: DECIMAL(38,18)
+
+              - column:
+                  name: locked_balance
+                  type: DECIMAL(38,18)
+
+              - column:
+                  name: wallet_id
+                  type: BIGINT
+
+              - column:
+                  name: asset_id
+                  type: BIGINT
+
+              - column:
+                  name: created_at
+                  type: TIMESTAMP
+
+              - column:
+                  name: updated_at
+                  type: TIMESTAMP
+
+              - column:
+                  name: created_by
+                  type: UUID
+
+              - column:
+                  name: updated_by
+                  type: UUID
+
+        - addPrimaryKey:
+            tableName: wallet_balances_aud
+            columnNames: id, rev
+            constraintName: pk_wallet_balances_aud
+
+        - addForeignKeyConstraint:
+            baseTableName: wallet_balances_aud
+            baseColumnNames: rev
+            referencedTableName: revinfo
+            referencedColumnNames: rev
+            constraintName: fk_wallet_balances_aud_rev
+
+  - changeSet:
+      id: 008-fix-revinfo-sequence-increment
+      author: dara
+
+      changes:
+        - sql:
+            sql: ALTER SEQUENCE revinfo_seq INCREMENT BY 50;

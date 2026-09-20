@@ -3,18 +3,20 @@ package org.dara.walletservice.model;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
+import org.dara.walletservice.audit.AuditableEntity;
 import org.dara.walletservice.exception.InsufficientBalanceException;
 import org.dara.walletservice.exception.InvalidAmountException;
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.RelationTargetAuditMode;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "wallet_balances")
 @Getter
 @NoArgsConstructor
-public class WalletBalance {
+@Audited
+public class WalletBalance extends AuditableEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -25,18 +27,14 @@ public class WalletBalance {
     @Column(nullable = false, precision = 38, scale = 18)
     private BigDecimal  lockedBalance;
 
-    @Column(nullable = false)
-    private LocalDateTime createdAt;
-
-    @Column(nullable = false)
-    private LocalDateTime updatedAt;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "wallet_id", nullable = false)
+    @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
     private Wallet wallet;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "asset_id",nullable = false)
+    @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
     private Asset asset;
 
     public WalletBalance(Wallet wallet, Asset asset) {
@@ -44,16 +42,6 @@ public class WalletBalance {
         this.asset = asset;
         this.availableBalance = BigDecimal.ZERO;
         this.lockedBalance = BigDecimal.ZERO;
-    }
-
-    @PrePersist
-    protected void onCreate(){
-        this.createdAt = LocalDateTime.now();
-        this.updatedAt = LocalDateTime.now();
-    }
-    @PreUpdate
-    protected void onUpdate(){
-        this.updatedAt = LocalDateTime.now();
     }
 
     public void validateAmount(BigDecimal amount){

@@ -31,16 +31,34 @@ public class WalletServiceImpl implements WalletService {
     @Transactional
     @Override
     public Wallet createWallet(UUID userUuid) {
+
+        System.out.println("========== CREATE WALLET START ==========");
+
         Optional<Wallet> existingWallet = walletRepository.findByUserUuid(userUuid);
+
+        System.out.println("Wallet lookup done");
+
         if (existingWallet.isPresent())
             return existingWallet.get();
         Wallet wallet = new Wallet(userUuid);
         Wallet savedWallet = walletRepository.save(wallet);
+
+        System.out.println("Wallet saved: " + savedWallet.getId());
+        System.out.println("Before asset query");
+
         List<Asset> assets = assetRepository.findByActiveTrue();
+        System.out.println("Assets loaded: " + assets.size());
+        System.out.println("ACTIVE ASSETS = " + assets.size());
+
         for (Asset asset : assets) {
             WalletBalance walletBalance = new WalletBalance(savedWallet, asset);
             walletBalanceRepository.save(walletBalance);
+
+            System.out.println("Balance saved for: "
+                    + asset.getSymbol());
         }
+
+        System.out.println("========== CREATE WALLET END ==========");
         return savedWallet;
     }
 

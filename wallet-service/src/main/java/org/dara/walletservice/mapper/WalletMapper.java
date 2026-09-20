@@ -1,7 +1,9 @@
 package org.dara.walletservice.mapper;
 
+import org.dara.walletservice.dto.DepositResponse;
 import org.dara.walletservice.dto.WalletBalanceResponse;
 import org.dara.walletservice.dto.WalletResponse;
+import org.dara.walletservice.model.Deposit;
 import org.dara.walletservice.model.Wallet;
 import org.dara.walletservice.model.WalletBalance;
 import org.mapstruct.Mapper;
@@ -18,4 +20,7 @@ public interface WalletMapper {
     WalletBalanceResponse walletBalanceToWalletBalanceResponse(WalletBalance walletBalance);
 
     List<WalletBalanceResponse> walletBalancesToWalletBalanceResponse(List<WalletBalance> walletBalances);
+
+    @Mapping(source = "asset.symbol", target = "asset")
+    DepositResponse depositToDepositResponse(Deposit deposit);
 }

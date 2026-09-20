@@ -1,0 +1,26 @@
+
+databaseChangeLog:
+  -  changeSet:
+       id:  001-add-createdByAndUpdatedBy-column
+       author:  dara
+
+       changes:
+         - addColumn:
+             tableName: deposits
+             columns:
+               - column:
+                   name: created_by
+                   type: UUID
+               - column:
+                   name: updated_by
+                   type: UUID
+
+         - addColumn:
+             tableName: wallet_balances
+             columns:
+               - column:
+                   name: created_by
+                   type: UUID
+               - column:
+                   name: updated_by
+                   type: UUID

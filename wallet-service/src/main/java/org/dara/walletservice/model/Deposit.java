@@ -3,16 +3,19 @@ package org.dara.walletservice.model;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.dara.walletservice.audit.AuditableEntity;
 import org.dara.walletservice.model.constant.DepositStatus;
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.RelationTargetAuditMode;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "deposits")
 @Getter
 @NoArgsConstructor
-public class Deposit {
+@Audited
+public class Deposit extends AuditableEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,32 +30,22 @@ public class Deposit {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "wallet_id", nullable = false)
+    @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
     private Wallet wallet;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "asset_id", nullable = false)
+    @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
     private Asset asset;
-
-    @Column(nullable = false)
-    private LocalDateTime createdAt;
-
-    @Column(nullable = false)
-    private LocalDateTime updatedAt;
 
     public Deposit(Wallet wallet, Asset asset, BigDecimal amount) {
         this.wallet = wallet;
         this.asset = asset;
         this.amount = amount;
+        this.status = DepositStatus.PENDING;
     }
 
-    @PrePersist
-    protected void onCreate(){
-        createdAt = LocalDateTime.now();
-        updatedAt = LocalDateTime.now();
-    }
-
-    @PreUpdate
-    protected void onUpdate(){
-        updatedAt = LocalDateTime.now();
+    public void complete(){
+        status = DepositStatus.COMPLETED;
     }
 }

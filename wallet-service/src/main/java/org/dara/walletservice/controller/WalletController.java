@@ -103,6 +103,26 @@ public class WalletController {
         return ResponseEntity.ok(walletMapper.walletBalanceToWalletBalanceResponse(walletBalance));
     }
 
+    @Operation(
+            summary = "Get current user's total balance",
+            description = "Returns the total balance of wallet for the currently authenticated user."
+    )
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Total Balance retrieved successfully"
+            ),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "User is not authenticated"
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Wallet, asset, or wallet balance not found",
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class))
+            )
+    })
+    @SecurityRequirement(name = "bearerAuth")
     @GetMapping("/me/balances/total-balance")
     public ResponseEntity<TotalWalletBalanceResponse> getTotalWalletBalance(@AuthenticationPrincipal CurrentUser currentUser) {
         return ResponseEntity.ok(new TotalWalletBalanceResponse(walletService.calculateTotalBalance(currentUser.userUuid())));

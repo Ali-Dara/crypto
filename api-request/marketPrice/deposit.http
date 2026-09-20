@@ -1,15 +1,8 @@
-### GET request to example server
-#GET http://localhost:8006/market/test-price
-
-#GET http://localhost:8006/market/prices
-
-##GET http://localhost:8006/market/prices/BTC
-
-@accessToken = YOUR_ACCESS_TOKEN
-
-### Test Market gRPC
-GET http://localhost:8005/wallet/me/balances/total-balance
+POST http://localhost:8005/wallet/deposit
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJwZXJtaXNzaW9ucyI6WyJSRUFEIl0sInJvbGVzIjpbIlJPTEVfVVNFUiJdLCJ1c2VyVVVJRCI6IjAzZmVhMjIyLTM0ODItNDAwMS05NmU2LTZhNzdmMzNlZDNlZCIsInVzZXJJZCI6NDMsImVtYWlsIjoiZGFyYWVpYWxpcmV6YTc2QGdtYWlsLmNvbSIsInN1YiI6InNvZnR3YXJlRW5naW5lZXIiLCJleHAiOjE3ODk4NTU0MzYsImlhdCI6MTc4OTg1NTEzNn0.uDIFBa4OhABtpgYu4j8PdXYEXsZfGd3Fvlrhj_hXj7k
-Accept: application/json
+Content-Type: application/json
 
-
+{
+  "asset": "BTC",
+  "amount": "0.15"
+}
