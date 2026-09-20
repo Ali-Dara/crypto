@@ -38,6 +38,9 @@ public class Wallet {
     @OneToMany(mappedBy = "wallet")
     private Set<Deposit> deposits = new HashSet<>();
 
+    @OneToMany(mappedBy = "wallet")
+    private Set<Deposit> withdrawals = new HashSet<>();
+
     public Wallet(UUID userUuid) {
         this.userUuid = userUuid;
         this.createdAt = LocalDateTime.now();
