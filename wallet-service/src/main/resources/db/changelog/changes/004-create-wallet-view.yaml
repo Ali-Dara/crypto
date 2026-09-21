@@ -1,0 +1,33 @@
+databaseChangeLog:
+  - changeSet:
+      id: 010-create-transaction-history-view
+      author: dara
+
+      changes:
+        - sql:
+            sql: |
+              CREATE VIEW wallet_transaction_history AS
+
+              SELECT
+                  'D-' || d.id AS transaction_id,
+                  d.wallet_id,
+                  'DEPOSIT' AS type,
+                  a.symbol AS asset,
+                  d.amount,
+                  d.status,
+                  d.created_at
+              FROM deposits d
+              JOIN assets a ON a.id = d.asset_id
+
+              UNION ALL
+
+              SELECT
+                  'W-' || w.id AS transaction_id,
+                  w.wallet_id,
+                  'WITHDRAWAL' AS type,
+                  a.symbol AS asset,
+                  w.amount,
+                  w.status,
+                  w.created_at
+              FROM withdrawals w
+              JOIN assets a ON a.id = w.asset_id;

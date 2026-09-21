@@ -1,0 +1,8 @@
+POST http://localhost:8005/wallet/withdrawal
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJwZXJtaXNzaW9ucyI6WyJSRUFEIl0sInJvbGVzIjpbIlJPTEVfVVNFUiJdLCJ1c2VyVVVJRCI6IjAzZmVhMjIyLTM0ODItNDAwMS05NmU2LTZhNzdmMzNlZDNlZCIsInVzZXJJZCI6NDMsImVtYWlsIjoiZGFyYWVpYWxpcmV6YTc2QGdtYWlsLmNvbSIsInN1YiI6InNvZnR3YXJlRW5naW5lZXIiLCJleHAiOjE3OTAwMjMyMDYsImlhdCI6MTc5MDAyMjkwNn0.pQNbZipZ9tLlKJ-Tu-gafulw8_s_UPc-KPDGIeokD3w
+Content-Type: application/json
+
+{
+  "assetSymbol": "BTC",
+  "amount": "0.06"
+}
