@@ -6,5 +6,6 @@ public record WithdrawalResponse(
 
         String asset,
         BigDecimal amount,
-        String status
+        String status,
+        String idempotencyKey
 ) {}

@@ -14,10 +14,7 @@ import org.dara.walletservice.dto.WithdrawalResponse;
 import org.dara.walletservice.service.WithdrawalService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/wallet")
@@ -51,7 +48,7 @@ public class WithdrawalController {
             )
     })
     @PostMapping("/withdrawal")
-    public ResponseEntity<WithdrawalResponse> withdrawal(@AuthenticationPrincipal CurrentUser currentUser, @Valid @RequestBody WithdrawalRequest request) {
-        return ResponseEntity.ok(service.withdraw(currentUser.userUuid(), request));
+    public ResponseEntity<WithdrawalResponse> withdrawal(@AuthenticationPrincipal CurrentUser currentUser, @RequestHeader("Idempotency-Key") String idempotencyKey, @Valid @RequestBody WithdrawalRequest request) {
+        return ResponseEntity.ok(service.withdraw(currentUser.userUuid(), request, idempotencyKey));
     }
 }

@@ -532,3 +532,43 @@ databaseChangeLog:
             referencedTableName: revinfo
             referencedColumnNames: rev
             constraintName: fk_withdrawals_aud_rev
+
+  - changeSet:
+      id: 011-add-withdrawal-idempotency
+      author: dara
+      changes:
+
+        - addColumn:
+            tableName: withdrawals
+            columns:
+              - column:
+                  name: idempotency_key
+                  type: VARCHAR(100)
+
+        - sql:
+            sql: |
+              UPDATE withdrawals
+              SET idempotency_key = 'legacy-withdrawal-' || id
+              WHERE idempotency_key IS NULL;
+
+        - addNotNullConstraint:
+            tableName: withdrawals
+            columnName: idempotency_key
+            columnDataType: VARCHAR(100)
+
+        - addUniqueConstraint:
+            tableName: withdrawals
+            columnNames: idempotency_key
+            constraintName: uk_withdrawals_idempotency_key
+
+  - changeSet:
+      id: 012-add-withdrawal-idempotency
+      author: dara
+      changes:
+
+        - addColumn:
+            tableName: withdrawals_aud
+            columns:
+              - column:
+                  name: idempotency_key
+                  type: VARCHAR(100)

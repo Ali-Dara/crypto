@@ -1,8 +1,9 @@
 POST http://localhost:8005/wallet/withdrawal
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJwZXJtaXNzaW9ucyI6WyJSRUFEIl0sInJvbGVzIjpbIlJPTEVfVVNFUiJdLCJ1c2VyVVVJRCI6IjAzZmVhMjIyLTM0ODItNDAwMS05NmU2LTZhNzdmMzNlZDNlZCIsInVzZXJJZCI6NDMsImVtYWlsIjoiZGFyYWVpYWxpcmV6YTc2QGdtYWlsLmNvbSIsInN1YiI6InNvZnR3YXJlRW5naW5lZXIiLCJleHAiOjE3OTAwMjMyMDYsImlhdCI6MTc5MDAyMjkwNn0.pQNbZipZ9tLlKJ-Tu-gafulw8_s_UPc-KPDGIeokD3w
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJwZXJtaXNzaW9ucyI6WyJSRUFEIl0sInJvbGVzIjpbIlJPTEVfVVNFUiJdLCJ1c2VyVVVJRCI6IjAzZmVhMjIyLTM0ODItNDAwMS05NmU2LTZhNzdmMzNlZDNlZCIsInVzZXJJZCI6NDMsImVtYWlsIjoiZGFyYWVpYWxpcmV6YTc2QGdtYWlsLmNvbSIsInN1YiI6InNvZnR3YXJlRW5naW5lZXIiLCJleHAiOjE3OTAyNzQzMzYsImlhdCI6MTc5MDI3NDAzNn0.tVlS4_H3WR0iFHNOz7FdBN-ykspS0bA7RDrKKmHtBCc
 Content-Type: application/json
+Idempotency-Key: e21a2435-26ab-4a9d-a844-5c2ba7cdb23f
 
 {
   "assetSymbol": "BTC",
-  "amount": "0.06"
+  "amount": "0.015"
 }

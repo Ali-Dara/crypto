@@ -5,7 +5,7 @@ import org.dara.walletservice.dto.WithdrawalResponse;
 
 import java.util.UUID;
 
-public interface WithdrawalService {
+public interface WithdrawalOperationService {
 
-    WithdrawalResponse withdraw(UUID userUuid, WithdrawalRequest request, String idempotencyKey);
+    WithdrawalResponse process(UUID userUuid, WithdrawalRequest request, String idempotencyKey);
 }
