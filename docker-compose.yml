@@ -210,11 +210,52 @@ services:
     networks:
       - crypto-network
 
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:9.5.4
+    container_name: elasticsearch
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - xpack.license.self_generated.type=trial
+      - ES_JAVA_OPTS=-Xms512m -Xmx512m
+    ports:
+      - "9200:9200"
+    volumes:
+      - elasticsearch-data:/usr/share/elasticsearch/data
+    networks:
+      - crypto-network
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:9.5.4
+    container_name: kibana
+    depends_on:
+      - elasticsearch
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+    ports:
+      - "5601:5601"
+    networks:
+      - crypto-network
+
+  logstash:
+    image: docker.elastic.co/logstash/logstash:9.5.4
+    container_name: logstash
+    ports:
+      - "5044:5044"
+      - "9600:9600"
+    volumes:
+      - ./elk/logstash/pipeline:/usr/share/logstash/pipeline
+    depends_on:
+      - elasticsearch
+    networks:
+      - crypto-network
+
 volumes:
   auth-db-data:
   user-db-data:
   wallet-db-data:
   kafka-data:
+  elasticsearch-data:
 
 networks:
   crypto-network:

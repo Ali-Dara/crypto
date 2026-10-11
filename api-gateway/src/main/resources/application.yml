@@ -24,7 +24,7 @@ spring:
             - id: wallet-route
               uri: lb://WALLET-SERVICE
               predicates:
-                - Path=/wallet/**    -
+                - Path=/wallet/**
 
 eureka:
   client:
