@@ -33,6 +33,7 @@
         <crypto-security.version>1.0.0</crypto-security.version>
         <crypto-events.version>1.0.0</crypto-events.version>
         <crypto-market-contract>1.0.0</crypto-market-contract>
+        <logstash.version>9.0</logstash.version>
     </properties>
 
     <dependencyManagement>
@@ -95,6 +96,11 @@
                 <version>${grpc.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>net.logstash.logback</groupId>
+                <artifactId>logstash-logback-encoder</artifactId>
+                <version>${logstash.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
